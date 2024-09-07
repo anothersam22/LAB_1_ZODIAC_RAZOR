@@ -1,0 +1,52 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Zodiac Sign Calculator";
+}
+
+<h1>Zodiac Sign Calculator</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label for="year">Year:</label>
+        <input type="number" asp-for="Year" id="year" class="form-control" />
+        <span asp-validation-for="Year" class="text-danger"></span>
+    </div>
+    <br />
+
+    <button type="submit" class="btn btn-primary">Get Zodiac</button>
+    <button type="button" id="clear-button" class="btn btn-success" onclick="clearForm()">Clear</button>
+</form>
+
+@if (Model.ZodiacSign != null)
+{   
+    <br />
+    <div class="alert alert-success">
+        Your zodiac is <strong>@Model.ZodiacSign</strong>.
+         <img src="@($"/images/{Model.ZodiacSign.ToLower().Replace(' ', '_')}.png")" alt="@Model.ZodiacSign" />
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+       <br />
+    <div class="alert alert-danger">
+        @Model.ErrorMessage
+    </div>
+}
+
+<script>
+    function clearForm() {
+        document.getElementById('year').value = '';
+        document.querySelector('form').appendChild(createHiddenInput('clear-button'));
+        document.querySelector('form').submit(); // Submit the form to clear the server-side state
+    }
+
+    function createHiddenInput(name) {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = 'true';
+        return input;
+    }
+</script>
